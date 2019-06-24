@@ -1,4 +1,18 @@
-#why_are_you_reading_this
+#why_are_you_reading_thi# Gradle files
+.gradle/
+
+# User-specific configurations
+*.iml
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+s
 # Gradle files
 .gradle/
 
