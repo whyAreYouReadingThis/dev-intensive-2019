@@ -33,7 +33,7 @@ object Utils {
         else it
     }
 
-    fun transliteration(payload: String, divider: String = "_") = buildString {
+    fun transliteration(payload: String, divider: String = " ") = buildString {
         payload.forEach {
             append(
                 when {
