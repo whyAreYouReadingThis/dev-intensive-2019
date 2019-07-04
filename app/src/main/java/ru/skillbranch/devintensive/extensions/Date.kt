@@ -79,6 +79,19 @@ private fun daysAsPlulars(value: Long) = when (value.asPlurals) {
     Plurals.MANY -> "$value дней"
 }
 
+
+fun TimeUnits.plural(value: Int): String {
+
+    return when (this) {
+        TimeUnits.SECOND -> "$value секунды"
+        TimeUnits.MINUTE -> "$value минуты"
+        TimeUnits.HOUR -> "$value часы"
+        TimeUnits.DAY -> "$value дни"
+    }
+
+}
+
+
 enum class Plurals {
     ONE,
     FEW,
