@@ -5,4 +5,11 @@ class Chat(
     val members: MutableList<User> = mutableListOf(),
     val messages: MutableList<BaseMessage> = mutableListOf()
 ) {
+
+    fun testChat(){
+        val great = 1
+        println(great)
+    }
+
+
 }

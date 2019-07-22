@@ -1,5 +1,6 @@
 package ru.skillbranch.devintensive.models
 
+//cre nw branch wth hometsk3
 class Bender(var status:Status = Status.NORMAL, var question: Question = Question.NAME) {
 
     fun askQuestion():String = when(question){
