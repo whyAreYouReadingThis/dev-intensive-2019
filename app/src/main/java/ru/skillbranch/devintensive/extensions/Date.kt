@@ -1,10 +1,8 @@
 package ru.skillbranch.devintensive.extensions
 
-import ru.skillbranch.devintensive.extensions.TimeUnits.*
+import java.lang.Math.abs
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.abs
-
 
 const val SECOND = 1000L
 const val MINUTE = 60 * SECOND
@@ -16,92 +14,106 @@ fun Date.format(pattern: String = "HH:mm:ss dd.MM.yy"): String {
     return dateFormat.format(this)
 }
 
+fun Date.shortFormat(): String? {
+    val pattern = if (this.isSameDay(Date())) "HH:mm" else "dd.MM.yy"
+    val dateFormat = SimpleDateFormat(pattern, Locale("ru"))
+
+    return dateFormat.format(this)
+}
+
+fun Date.isSameDay(date: Date): Boolean {
+    val day1 = this.time / DAY
+    val day2 = date.time / DAY
+
+    return day1 == day2
+}
+
 fun Date.add(value: Int, units: TimeUnits = TimeUnits.SECOND): Date {
-    this.time += when (units) {
+    var time = this.time
+
+    time += when (units) {
         TimeUnits.SECOND -> value * SECOND
         TimeUnits.MINUTE -> value * MINUTE
         TimeUnits.HOUR -> value * HOUR
         TimeUnits.DAY -> value * DAY
     }
+
+    this.time = time
+
     return this
 }
 
 fun Date.humanizeDiff(date: Date = Date()): String {
-    val diff = date.time - this.time
-    val absDiff = abs(diff)
-    val isPast = diff > 0
+    val diff = this.time - date.time
+
+    return if (diff >= 0)
+        intervalInFuture(abs(diff))
+        else
+        intervalInPast(abs(diff))
+}
+
+private fun intervalInFuture(diff: Long): String {
+    val secondDiff = abs(diff / SECOND.toDouble()).toInt()
+    val minuteDiff = abs(diff / MINUTE.toDouble()).toInt()
+    val hourDiff = abs(diff / HOUR.toDouble()).toInt()
+    val dayDiff = abs(diff / DAY.toDouble()).toInt()
 
     return when {
-        absDiff / SECOND <= 1 -> "только что"
-        absDiff / SECOND <= 45 -> if (isPast) "несколько секунд назад" else "через несколько секунд"
-        absDiff / SECOND <= 75 -> if (isPast) "минуту назад" else "через минуту"
-        absDiff / MINUTE <= 45 -> if (isPast) "${TimeUnits.MINUTE.plural((absDiff / MINUTE).toInt())} назад"
-        else "через ${TimeUnits.MINUTE.plural((absDiff / MINUTE).toInt())}"
-        absDiff / MINUTE <= 75 -> if (isPast) "час назад" else "через час"
-        absDiff / HOUR <= 22 -> if (isPast) "${TimeUnits.HOUR.plural((absDiff / HOUR).toInt())} назад"
-        else "через ${TimeUnits.HOUR.plural((absDiff / HOUR).toInt())}"
-        absDiff / HOUR <= 26 -> if (isPast) "день назад" else "через день"
-        absDiff / DAY <= 360 -> if (isPast) "${TimeUnits.DAY.plural((absDiff / DAY).toInt())} назад"
-        else "через ${TimeUnits.DAY.plural((absDiff / DAY).toInt())}"
-        else -> if (isPast) "более года назад" else "более чем через год"
+        secondDiff <= 1 -> "только что"
+        secondDiff <= 45 -> "через несколько секунд"
+        secondDiff <= 75 -> "через минуту"
+        minuteDiff <= 45 -> "через ${TimeUnits.MINUTE.plural(minuteDiff)}"
+        minuteDiff <= 75 -> "через час"
+        hourDiff <= 22 -> "через ${TimeUnits.HOUR.plural(hourDiff)}"
+        hourDiff <= 26 -> "через день"
+        dayDiff <= 360 -> "через ${TimeUnits.DAY.plural(dayDiff)}"
+        else -> "более чем через год"
     }
 }
 
+private fun intervalInPast(diff: Long): String {
+    val secondDiff = abs(diff / SECOND.toDouble()).toInt()
+    val minuteDiff = abs(diff / MINUTE.toDouble()).toInt()
+    val hourDiff = abs(diff / HOUR.toDouble()).toInt()
+    val dayDiff = abs(diff / DAY.toDouble()).toInt()
+
+    return when {
+        secondDiff <= 1 -> "только что"
+        secondDiff <= 45 -> "несколько секунд назад"
+        secondDiff <= 75 -> "минуту назад"
+        minuteDiff <= 45 -> "${TimeUnits.MINUTE.plural(minuteDiff)} назад"
+        minuteDiff <= 75 -> "час назад"
+        hourDiff <= 22 -> "${TimeUnits.HOUR.plural(hourDiff)} назад"
+        hourDiff <= 26 -> "день назад"
+        dayDiff <= 360 -> "${TimeUnits.DAY.plural(dayDiff)} назад"
+        else -> "более года назад"
+    }
+}
 
 enum class TimeUnits {
-    SECOND {
-        override fun plural(value: Int): String {
-            val remainder = value % 10
-            var quotient = value / 10
-            while (quotient > 10) quotient /= 10
+    SECOND, MINUTE, HOUR, DAY;
 
-            return when {
-                (remainder in 2..4) && (quotient != 1) -> "$value секунды"
-                (remainder == 1) && (quotient != 1) -> "$value секунду"
-                else -> "$value секунд"
-            }
-        }
-    },
-    MINUTE {
-        override fun plural(value: Int): String {
-            val remainder = value % 10
-            var quotient = value / 10
-            while (quotient > 10) quotient /= 10
-
-            return when {
-                (remainder in 2..4) && (quotient != 1) -> "$value минуты"
-                (remainder == 1) && (quotient != 1) -> "$value минуту"
-                else -> "$value минут"
-            }
-        }
-    },
-    HOUR {
-        override fun plural(value: Int): String {
-            val remainder = value % 10
-            var quotient = value / 10
-            while (quotient > 10) quotient /= 10
-
-            return when {
-                (remainder in 2..4) && (quotient != 1) -> "$value часа"
-                (remainder == 1) && (quotient != 1) -> "$value час"
-                else -> "$value часов"
-            }
-        }
-    },
-    DAY {
-        override fun plural(value: Int): String {
-            val remainder = value % 10
-            var quotient = value / 10
-            while (quotient > 10) quotient /= 10
-
-            return when {
-                (remainder in 2..4) && (quotient != 1) -> "$value дня"
-                (remainder == 1) && (quotient != 1) -> "$value день"
-                else -> "$value дней"
-            }
+    fun plural(value: Int): String {
+        val list = when (this) {
+            MINUTE -> listOf("минуту", "минуты", "минут")
+            HOUR -> listOf("час", "часа", "часов")
+            DAY -> listOf("день", "дня", "дней")
+            SECOND -> listOf("секунду", "секунды", "секунд")
         }
 
-    };
+        val argument: Int = when {
+            value <= 19 -> value
+            value % 100 <= 19 -> value % 100
+            else -> value % 10
+        }
 
-    abstract fun plural(value: Int): String
+        val time = when (argument) {
+            0, in 5..19 -> list[2]
+            1 -> list[0]
+            in 2..4 -> list[1]
+            else -> ""
+        }
+
+        return "$value $time"
+    }
 }

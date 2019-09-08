@@ -1,6 +1,5 @@
 package ru.skillbranch.devintensive.repositories
 
-
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatDelegate
@@ -17,16 +16,26 @@ object PreferencesRepository {
     private const val RESPECT = "RESPECT"
     private const val APP_THEME = "APP_THEME"
 
+    @Suppress("DEPRECATION")
+    private val prefs: SharedPreferences by lazy {
+        val ctx = App.applicationContext()
+        PreferenceManager.getDefaultSharedPreferences(ctx)
+    }
+
     fun saveAppTheme(theme: Int) {
         putValue(APP_THEME to theme)
     }
 
     fun getAppTheme(): Int = prefs.getInt(APP_THEME, AppCompatDelegate.MODE_NIGHT_NO)
 
-    private val prefs: SharedPreferences by lazy {
-        val ctx = App.applicationContext()
-        PreferenceManager.getDefaultSharedPreferences(ctx)
-    }
+    fun getProfile(): Profile = Profile (
+            prefs.getString(FIRST_NAME, "")!!,
+            prefs.getString(LAST_NAME, "")!!,
+            prefs.getString(ABOUT, "")!!,
+            prefs.getString(REPOSITORY, "")!!,
+            prefs.getInt(RATING, 0),
+            prefs.getInt(RESPECT, 0)
+    )
 
     fun saveProfile(profile: Profile) {
         with(profile) {
@@ -37,18 +46,6 @@ object PreferencesRepository {
             putValue(RATING to rating)
             putValue(RESPECT to respect)
         }
-
-    }
-
-    fun getProfile():  Profile{
-        return Profile(
-            prefs.getString(FIRST_NAME, "")!!,
-            prefs.getString(LAST_NAME, "")!!,
-            prefs.getString(ABOUT, "")!!,
-            prefs.getString(REPOSITORY, "")!!,
-            prefs.getInt(RATING, 0),
-            prefs.getInt(RESPECT, 0)
-        )
     }
 
     private fun putValue(pair: Pair<String, Any>) = with(prefs.edit()) {
@@ -61,9 +58,7 @@ object PreferencesRepository {
             is Boolean -> putBoolean(key, value)
             is Long -> putLong(key, value)
             is Float -> putFloat(key, value)
-            else -> error("Only primitives types can be stored on Shared Preferences")
-
+            else -> error("only primitives types can be stored in Shared Preferences")
         }
-            .apply()
-    }
+    }.apply()
 }

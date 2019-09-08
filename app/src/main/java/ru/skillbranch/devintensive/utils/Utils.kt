@@ -1,61 +1,81 @@
 package ru.skillbranch.devintensive.utils
 
-object Utils {
-    val charMap = mapOf(
-        'а' to "a", 'б' to "b", 'в' to "v", 'г' to "g", 'д' to "d", 'е' to "e", 'ё' to "e",
-        'ж' to "zh", 'з' to "z", 'и' to "i", 'й' to "i", 'к' to "k", 'л' to "l", 'м' to "m",
-        'н' to "n", 'о' to "o", 'п' to "p", 'р' to "r", 'с' to "s", 'т' to "t", 'у' to "u",
-        'ф' to "f", 'х' to "h", 'ц' to "c", 'ч' to "ch", 'ш' to "sh", 'щ' to "sh'", 'ъ' to "",
-        'ы' to "i", 'ь' to "", 'э' to "e", 'ю' to "yu", 'я' to "ya"
-    )
+import java.lang.StringBuilder
 
-    fun parseFullName(fullName: String?): Pair<String?,String?>{
-        val parts = fullName?.trim()?.split(" ")
-        val firstName = if (parts?.getOrNull(0)?.length?:0 == 0) null else parts?.getOrNull(0)
-        val lastName = if (parts?.getOrNull(1)?.length?:0 == 0) null else parts?.getOrNull(1)
+object Utils {
+    fun parseFullName(fullName: String?): Pair<String?, String?> {
+        val parts: List<String>? = fullName?.trim()?.split(" ")
+
+        var firstName = parts?.getOrNull(0)
+        var lastName = parts?.getOrNull(1)
+
+        if (firstName.isNullOrBlank()) {
+            firstName = null
+        }
+
+        if (lastName.isNullOrBlank()) {
+            lastName = null
+        }
+
         return firstName to lastName
     }
 
-    fun transliteration(payload: String, divider:String = " "): String {
-        var result:String = ""
+    fun transliteration(payload: String, divider: String = " "): String {
+        val sb = StringBuilder()
+        var transChar: String
 
-        payload.trim().forEach { char ->
-            var isUppercase = char.isUpperCase()
-            var key = char.toLowerCase()
-            var simbol = if (char.isWhitespace()) divider else charMap.getOrDefault(key,char.toString())
-            if (isUppercase) {
-                result += if (simbol.length in (0..1)) (simbol.toUpperCase())
-                            else (simbol.get(0).toUpperCase().toString() + simbol.drop(1).toString())
-            } else {
-                result += simbol
+        for (char in payload.trim()) {
+            transChar = when (char.toLowerCase()) {
+                'а' -> "a"
+                'б' -> "b"
+                'в' -> "v"
+                'г' -> "g"
+                'д' -> "d"
+                'е' -> "e"
+                'ё' -> "e"
+                'ж' -> "zh"
+                'з' -> "z"
+                'и' -> "i"
+                'й' -> "i"
+                'к' -> "k"
+                'л' -> "l"
+                'м' -> "m"
+                'н' -> "n"
+                'о' -> "o"
+                'п' -> "p"
+                'р' -> "r"
+                'с' -> "s"
+                'т' -> "t"
+                'у' -> "u"
+                'ф' -> "f"
+                'х' -> "h"
+                'ц' -> "c"
+                'ч' -> "ch"
+                'ш' -> "sh"
+                'щ' -> "sh'"
+                'ъ' -> ""
+                'ы' -> "i"
+                'ь' -> ""
+                'э' -> "e"
+                'ю' -> "yu"
+                'я' -> "ya"
+                ' ' -> divider
+                else -> char.toString()
             }
+
+            if (char.isUpperCase() && transChar.isNotEmpty())
+              transChar = transChar[0].toUpperCase() + transChar.substring(1)
+
+            sb.append(transChar)
         }
 
-        return result
+        return sb.toString()
     }
 
     fun toInitials(firstName: String?, lastName: String?): String? {
-        val first = if (firstName?.trim()?.length?:0==0) null else firstName?.trim()?.substring(0,1)
-        val last = if (lastName?.trim()?.length?:0==0) null else lastName?.trim()?.substring(0,1)
-        val result = ((first?:"")+(last?:"")).trim().toUpperCase()
-        return if (result.length==0) null else result
+        if (firstName.isNullOrBlank() && lastName.isNullOrBlank())
+            return null
+
+        return "${firstName?.trim()?.get(0)?.toUpperCase() ?: ""}${lastName?.trim()?.get(0)?.toUpperCase() ?: ""}"
     }
-
-    fun mathGitHubAccount(adress:String):Boolean = adress.matches(
-        Regex("^(http(s){0,1}:\\/\\/){0,1}(www.){0,1}github.com\\/[A-z\\d](?:[A-z\\d]|-(?=[A-z\\d])){0,38}\$",RegexOption.IGNORE_CASE)) &&
-            !adress.matches(Regex("^.*(" +
-                        "\\/enterprise|" +
-                        "\\/features|" +
-                        "\\/topics|" +
-                        "\\/collections|" +
-                        "\\/trending|" +
-                        "\\/events|" +
-                        "\\/marketplace" +
-                        "|\\/pricing|" +
-                        "\\/nonprofit|" +
-                        "\\/customer-stories|" +
-                        "\\/security|" +
-                        "\\/login|" +
-                        "\\/join)\$",RegexOption.IGNORE_CASE))
-
 }
