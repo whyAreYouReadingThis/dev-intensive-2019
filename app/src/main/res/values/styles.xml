@@ -1,18 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light"/>
+    <style name="AppTheme.PopUpOverlay" parent="ThemeOverlay.MaterialComponents.Light"/>
 
-    <style name="ActivityTransitions" parent="android:style/Animation.Activity">
-        <item name="android:activityOpenEnterAnimation">@anim/bottom_up</item>
-        <item name="android:activityOpenExitAnimation">@anim/idle</item>
-        <item name="android:activityCloseEnterAnimation">@anim/idle</item>
-        <item name="android:activityCloseExitAnimation">@anim/bottom_down</item>
-    </style>
+<style name="ActivityTransitions" parent="android:style/Animation.Activity">
+    <item name="android:activityOpenEnterAnimation">@anim/bottom_up</item>
+    <item name="android:activityOpenExitAnimation">@anim/idle</item>
+    <item name="android:activityCloseEnterAnimation">@anim/idle</item>
+    <item name="android:activityCloseExitAnimation">@anim/bottom_down</item>
+</style>
 
     <style name="Profile">
-
     </style>
 
     <style name="Profile.EditText" parent="Profile">
@@ -55,7 +53,7 @@
     </style>
 
     <style name="Profile.Metrics.Value" parent="Profile.Metrics">
-        <item name="android:drawablePadding">4dp</item>
+        <item name="android:drawablePadding">@dimen/spacing_tiny_4</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">@dimen/font_large_20</item>
     </style>
@@ -64,11 +62,8 @@
         <item name="android:paddingBottom">5dp</item>
         <item name="android:paddingLeft">@dimen/spacing_normal_16</item>
         <item name="android:paddingRight">@dimen/spacing_normal_16</item>
-        <item name="android:minHeight">@dimen/space_maximum_72</item>
+        <item name="android:minHeight">72dp</item>
     </style>
 
-    <style name="SplashTheme" parent="AppTheme">
-        <item name="android:windowBackground">@drawable/ic_splash</item>
-    </style>
 
 </resources>

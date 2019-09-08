@@ -2,9 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <size android:width="@dimen/avatar_item_size"/>
-            <size android:height="@dimen/avatar_item_size"/>
-            <solid android:color="@color/cardview_dark_background"/>
+            <solid android:color="?attr/colorArchive"/>
         </shape>
     </item>
 </selector>

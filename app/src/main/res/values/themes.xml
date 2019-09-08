@@ -7,25 +7,31 @@
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent</item>
-        <item name="colorGrayDark">@color/color_gray_dark</item>
-        <item name="colorIndicator">@color/color_indicator</item>
-        <item name="colorSVIndicator">@color/color_green</item>
-        <item name="colorItemBackground">@color/color_item_light</item>
-        <item name="colorToolbar">@color/color_primary</item>
 
         <item name="colorAccentedSurface">@color/color_primary_light</item>
         <item name="colorIcon">@color/color_gray</item>
         <item name="colorDivider">@color/color_divider_dark</item>
-        <item name="colorSnackBarText">@color/color_item_light</item>
-        <item name="colorDoneIcon">@color/color_primary</item>
-        <item name="colorChip">@color/color_primary_light</item>
-        <item name="colorChipCloseIcon">@color/color_item_light</item>
+        <item name="colorBackground">@color/color_bg</item>
+        <item name="colorCounter">@color/color_counter</item>
+        <item name="colorIndicator">@color/color_green</item>
+        <item name="colorSnackBar">@color/color_primary</item>
+        <item name="colorSelected">@color/color_gray_light</item>
+        <item name="colorArchive">@color/color_gray</item>
+        <item name="colorBgChip">@color/color_primary_light</item>
+        <item name="colorCloseChip">@color/color_bg</item>
+        <item name="colorAllBg">@color/color_all_bg_light</item>
+        <item name="colorTextMessage">@color/color_gray_dark</item>
+        <item name="colorDone">@color/color_primary</item>
+
 
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowAnimationStyle">@style/ActivityTransitions</item>
-
+        
     </style>
 
-
+<!--<style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">-->
+<style name="SplashTheme" parent="Theme.MaterialComponents.NoActionBar">
+    <item name="android:windowBackground">@drawable/ic_splash</item>
+</style>
 
 </resources>
