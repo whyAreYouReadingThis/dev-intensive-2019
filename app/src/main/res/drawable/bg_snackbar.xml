@@ -3,7 +3,7 @@
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="5dp"/>
-            <solid android:color="?attr/colorSnackBar"/>
+            <solid android:color="@color/cardview_dark_background"/>
         </shape>
     </item>
 </selector>
